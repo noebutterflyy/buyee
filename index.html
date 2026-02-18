@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor Manual USD a ARS</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9; margin: 0; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 320px; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        label { display: block; font-size: 0.9rem; margin-bottom: 5px; color: #555; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        .res-box { background: #eef2f7; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #3498db; }
+        .res-text { font-size: 1.4rem; font-weight: bold; color: #2980b9; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Conversor Manual</h2>
+    <label>Precio del Dólar (ej: 1440)</label>
+    <input type="number" id="tasa" placeholder="Ingresa cotización" oninput="calcular()">
+    <label>Monto en Dólares (USD)</label>
+    <input type="number" id="monto" placeholder="Ingresa cantidad" oninput="calcular()">
+    <div class="res-box">
+        <span class="res-text" id="resultado">$ 0,00</span><br>
+        <small>Total en Pesos</small>
+    </div>
+</div>
+<script>
+    function calcular() {
+        const t = document.getElementById('tasa').value;
+        const m = document.getElementById('monto').value;
+        const res = document.getElementById('resultado');
+        if(t > 0 && m > 0) {
+            const total = t * m;
+            res.innerText = total.toLocaleString('es-AR', {style: 'currency', currency: 'ARS'});
+        } else { res.innerText = "$ 0,00"; }
+    }
+</script>
+</body>
+</html>
