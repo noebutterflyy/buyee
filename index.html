@@ -5,45 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Dólares</title>
     <style>
-        /* Diseño moderno para celulares */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 350px; }
-        h1 { font-size: 1.5rem; color: #333; text-align: center; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
-        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; /* Evita zoom automático en iPhone */ }
-        .resultado-container { background: #e8f5e9; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; }
-        #resultado { color: #2e7d32; margin: 0; font-size: 1.8rem; }
-        .footer { text-align: center; margin-top: 20px; font-size: 0.8rem; color: #888; }
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        h1 { color: #333; font-size: 1.4rem; }
+        .input-group { margin: 20px 0; text-align: left; }
+        label { font-weight: bold; color: #666; display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 18px; }
+        .resultado-box { background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; margin-top: 10px; }
+        #resultado { margin: 5px 0 0 0; font-size: 1.8rem; }
+        .cotizacion-fija { font-size: 0.9rem; color: #888; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Conversor de USD</h1>
+    <h1>Conversor USD a Pesos</h1>
     
-    <label>Monto en Dólares:</label>
-    <input type="number" id="usd" placeholder="¿Cuántos dólares?" oninput="calcular()">
+    <div class="input-group">
+        <label>Cantidad de Dólares:</label>
+        <input type="number" id="usd" placeholder="Escribí el monto aquí" oninput="calcular()">
+    </div>
 
-    <label>Cotización (Pesos):</label>
-    <input type="number" id="tasa" placeholder="Ej: 1100" oninput="calcular()">
+    <!-- El valor de la cotización está oculto o fijo aquí -->
+    <input type="hidden" id="tasa" value="1490">
 
-    <div class="resultado-container">
+    <div class="resultado-box">
         <span>Total en Pesos:</span>
         <h2 id="resultado">$ 0,00</h2>
     </div>
 
-    <div class="footer">
-        Cálculo manual en tiempo real
-    </div>
+    <p class="cotizacion-fija">Cotización fijada en: <strong id="val-tasa"></strong></p>
 </div>
 
 <script>
+    // Mostramos la tasa fija en el texto para que la gente sepa cuánto es
+    const tasaFija = document.getElementById('tasa').value;
+    document.getElementById('val-tasa').innerText = "$" + tasaFija;
+
     function calcular() {
         const usd = document.getElementById('usd').value;
         const tasa = document.getElementById('tasa').value;
         const display = document.getElementById('resultado');
 
-        if (usd > 0 && tasa > 0) {
+        if (usd > 0) {
             const total = usd * tasa;
             display.innerText = new Intl.NumberFormat('es-AR', {
                 style: 'currency',
