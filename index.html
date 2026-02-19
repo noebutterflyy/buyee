@@ -66,10 +66,14 @@
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
     <p class="descripcion">Ingresá el monto en USD del ítem que te interesa comprar. La cotización en pesos ya incluye el costo de servicio que cobra buyee en cada compra.</p>
     
-    <div class="input-group">
-        <label>Monto a enviar (USD):</label>
-        <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
-    </div>
+<div class="input-group">
+    <label>Tipo de Plan / Seguro:</label>
+    <select id="tipoSeguro" onchange="calcular()" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; cursor: pointer; outline: none; margin-top: 5px;">
+        <option value="0">Plan Lite (Gratis - Sin seguro)</option>
+        <option value="2.10">Plan Inspección </option>
+        <option value="3.45">Plan Estándar </option>
+    </select>
+</div>
 
     <div class="res-container">
         <span style="font-size: 0.8rem; font-weight: bold;">TOTAL A PAGAR:</span>
@@ -81,25 +85,29 @@
 
 <script>
     function calcular() {
-        const COTIZACION_PESOS = 1460; 
-        const CARGO_FIJO_USD = 2.06;
+    const COTIZACION_PESOS = 1460; 
+    const CARGO_FIJO_USD = 2.06;
 
-        const montoIngresado = parseFloat(document.getElementById('montoUser').value);
-        const visor = document.getElementById('total');
+    const montoIngresado = parseFloat(document.getElementById('montoUser').value);
+    const valorSeguro = parseFloat(document.getElementById('tipoSeguro').value);
+    const visor = document.getElementById('total');
 
-        if (montoIngresado > 0) {
-            const dolaresTotales = montoIngresado + CARGO_FIJO_USD;
-            const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
+    if (!isNaN(montoIngresado) && montoIngresado > 0) {
+        // Sumamos: Monto + Cargo Fijo + Seguro Elegido
+        const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
+        const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
 
-            visor.innerText = new Intl.NumberFormat('es-AR', {
-                style: 'currency',
-                currency: 'ARS'
-            }).format(resultadoFinal);
-        } else {
-            visor.innerText = "$ 0,00";
-        }
+        visor.innerText = resultadoFinal.toLocaleString('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+            minimumFractionDigits: 2
+        });
+        
+        // Efecto visual
+        visor.style.transition = "transform 0.1s";
+        visor.style.transform = "scale(1.05)";
+        setTimeout(() => visor.style.transform = "scale(1)", 100);
+    } else {
+        visor.innerText = "$ 0,00";
     }
-</script>
-
-</body>
-</html>
+}
