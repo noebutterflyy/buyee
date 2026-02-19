@@ -3,45 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Conversión</title>
+    <title>Calculadora de Envío</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 320px; text-align: center; }
-        label { font-weight: bold; color: #555; display: block; margin-bottom: 15px; font-size: 1.1rem; }
-        input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-size: 24px; text-align: center; outline: none; box-sizing: border-box; }
-        .res-container { margin-top: 25px; padding: 20px; background: #ebfaf0; border-radius: 15px; border: 1px solid #d4edda; }
-        #total { font-size: 2.2rem; font-weight: bold; color: #27ae60; margin: 0; }
+        /* --- 1. CONFIGURÁ TUS COLORES AQUÍ --- */
+        :root {
+            --color-fondo: #f0f4f8;       /* Color de fondo de la pantalla */
+            --color-tarjeta: #ffffff;    /* Color de la caja blanca */
+            --color-boton: #007bff;      /* Color de acento (bordes) */
+            --color-resultado: #28a745;  /* Color del precio final */
+            --color-texto: #333333;      /* Color de las letras */
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--color-fondo); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            color: var(--color-texto);
+        }
+
+        .card { 
+            background: var(--color-tarjeta); 
+            padding: 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 350px; 
+            text-align: center; 
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 10px; }
+        p.descripcion { font-size: 0.9rem; color: #666; margin-bottom: 25px; }
+
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { font-size: 0.85rem; font-weight: bold; margin-left: 5px; }
+
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            border: 2px solid #eee; 
+            border-radius: 15px; 
+            font-size: 20px; 
+            text-align: center; 
+            outline: none; 
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--color-boton); }
+
+        .res-container { 
+            margin-top: 30px; 
+            padding: 20px; 
+            background: #f8fff9; 
+            border-radius: 20px; 
+            border: 2px dashed var(--color-resultado); 
+        }
+
+        #total { 
+            font-size: 2.2rem; 
+            font-weight: bold; 
+            color: var(--color-resultado); 
+            margin: 10px 0 0 0; 
+        }
+
+        .nota-final { font-size: 0.75rem; color: #999; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <label>Dólares a enviar (USD)</label>
-    <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
+    <!-- --- 2. ESCRIBÍ TUS PROPIOS TEXTOS AQUÍ --- -->
+    <h1>noe.butterflyy 🦋</h1> 
+    <p class="descripcion">Ingresá el monto en usd del ítem que te interesa comprar. La cotización en buyee ya incluye el costo de servicio que cobra buyee en cada compra.</p>
+    
+    <div class="input-group">
+        <label>Monto a enviar (USD):</label>
+        <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
+    </div>
 
     <div class="res-container">
-        <span style="font-size: 0.9rem; color: #666;">Total a pagar en pesos:</span>
+        <span style="font-size: 0.9rem;">TOTAL A PAGAR:</span>
         <p id="total">$ 0,00</p>
     </div>
+
+    <p class="nota-final">Los montos incluyen cargos operativos.</p>
 </div>
 
 <script>
     function calcular() {
-        // --- TU CONFIGURACIÓN PRIVADA ---
-        const COTIZACION_PESOS = 1467; // El valor que vos determinás
-        const CARGO_FIJO_USD = 2.06;   // Los USD que se suman al monto inicial
+        // --- 3. TU CONFIGURACIÓN PRIVADA (IGUAL QUE ANTES) ---
+        const COTIZACION_PESOS = 1467; 
+        const CARGO_FIJO_USD = 2.06;
 
         const montoIngresado = parseFloat(document.getElementById('montoUser').value);
         const visor = document.getElementById('total');
 
         if (montoIngresado > 0) {
-            // 1. Sumamos los 2.06 a los DÓLARES que puso el usuario
             const dolaresTotales = montoIngresado + CARGO_FIJO_USD;
-
-            // 2. Multiplicamos esos dólares por tu cotización en pesos
             const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
 
-            // 3. Mostramos el resultado
             visor.innerText = new Intl.NumberFormat('es-AR', {
                 style: 'currency',
                 currency: 'ARS'
