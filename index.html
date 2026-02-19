@@ -3,85 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Envío</title>
+    <title>noe.butterflyy 🦋</title>
     <style>
-        /* --- 1. CONFIGURÁ TUS COLORES AQUÍ --- */
         :root {
-            --color-fondo: #B2FFFF;       /* Color de fondo de la pantalla */
-            --color-tarjeta: #ffffff;    /* Color de la caja blanca */
-            --color-boton: #007bff;      /* Color de acento (bordes) */
-            --color-resultado: #288ea7;  /* Color del precio final */
-            --color-texto: #333333;      /* Color de las letras */
+            --color-fondo: #B2FFFF;       /* Celeste que elegiste */
+            --color-tarjeta: #ffffff;
+            --color-boton: #007bff;
+            --color-resultado: #288ea7;
+            --color-texto: #333333;
         }
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background-color: var(--color-fondo); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-            color: var(--color-texto);
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; color: var(--color-texto);
         }
 
         .card { 
             background: var(--color-tarjeta); 
-            padding: 40px; 
-            border-radius: 25px; 
+            padding: 30px; border-radius: 25px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 90%; 
-            max-width: 350px; 
-            text-align: center; 
+            width: 90%; max-width: 350px; text-align: center; 
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 10px; }
-        p.descripcion { font-size: 0.9rem; color: #666; margin-bottom: 25px; }
+        /* ESTILO PARA TU LOGO ACHICADO */
+        .logo {
+            width: 80px; /* Tamaño ideal */
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 15px; /* Bordes un poco redondeados */
+        }
+
+        h1 { font-size: 1.4rem; margin-bottom: 10px; color: #288ea7; }
+        p.descripcion { font-size: 0.85rem; color: #666; margin-bottom: 25px; line-height: 1.4; }
 
         .input-group { text-align: left; margin-bottom: 20px; }
-        label { font-size: 0.85rem; font-weight: bold; margin-left: 5px; }
+        label { font-size: 0.8rem; font-weight: bold; margin-left: 5px; color: #555; }
 
         input { 
-            width: 100%; 
-            padding: 15px; 
-            border: 2px solid #eee; 
-            border-radius: 15px; 
-            font-size: 20px; 
-            text-align: center; 
-            outline: none; 
-            box-sizing: border-box;
+            width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; 
+            font-size: 20px; text-align: center; outline: none; box-sizing: border-box;
             transition: 0.3s;
         }
-
         input:focus { border-color: var(--color-boton); }
 
         .res-container { 
-            margin-top: 30px; 
-            padding: 20px; 
-            background: #f8fff9; 
-            border-radius: 20px; 
-            border: 2px dashed var(--color-resultado); 
+            margin-top: 25px; padding: 20px; background: #f0fbfc; 
+            border-radius: 20px; border: 2px dashed var(--color-resultado); 
         }
 
-        #total { 
-            font-size: 2.2rem; 
-            font-weight: bold; 
-            color: var(--color-resultado); 
-            margin: 10px 0 0 0; 
-        }
-
-        .nota-final { font-size: 0.75rem; color: #999; margin-top: 20px; }
+        #total { font-size: 2.2rem; font-weight: bold; color: var(--color-resultado); margin: 10px 0 0 0; }
+        .nota-final { font-size: 0.7rem; color: #999; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-<!-- REEMPLAZÁ EL LINK DE ABAJO POR TU IMAGEN -->
-<img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+    <!-- IMAGEN CON TAMAÑO CORREGIDO -->
+    <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
-<div class="card">
-    <!-- --- 2. ESCRIBÍ TUS PROPIOS TEXTOS AQUÍ --- -->
-    <h1>noe.butterflyy 🦋</h1> 
+    <h1>🦋COTIZADOR DE USD - CAJA BUYEE🦋</h1> 
     <p class="descripcion">Ingresá el monto en usd del ítem que te interesa comprar. La cotización en buyee ya incluye el costo de servicio que cobra buyee en cada compra.</p>
     
     <div class="input-group">
@@ -90,7 +72,7 @@
     </div>
 
     <div class="res-container">
-        <span style="font-size: 0.9rem;">TOTAL A PAGAR:</span>
+        <span style="font-size: 0.8rem; font-weight: bold;">TOTAL A PAGAR:</span>
         <p id="total">$ 0,00</p>
     </div>
 
@@ -99,7 +81,6 @@
 
 <script>
     function calcular() {
-        // --- 3. TU CONFIGURACIÓN PRIVADA (IGUAL QUE ANTES) ---
         const COTIZACION_PESOS = 1467; 
         const CARGO_FIJO_USD = 2.06;
 
