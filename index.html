@@ -56,7 +56,7 @@
 
         .btn-limpiar {
             margin-top: 15px; background: #ffeded; color: #d9534f; border: none;
-            padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 0.8rem;
+            padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem;
             font-weight: bold; transition: 0.3s; width: 100%;
         }
         .btn-limpiar:hover { background: #f2dede; }
@@ -70,18 +70,16 @@
     <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
-    <p class="descripcion">Ingresá el monto del ítem. El total incluye el cargo de servicio y el seguro seleccionado.</p>
+    <p class="descripcion">Ingresá el monto del ítem. El total incluye el cargo fijo de servicio y el seguro de Buyee.</p>
     
-    <!-- MONTO EN USD -->
     <div class="input-group">
         <label>Monto del ítem (USD):</label>
         <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
     </div>
 
-    <!-- SEGURO (MONTOS OCULTOS AL USUARIO) -->
     <div class="input-group">
         <label>Tipo de Plan / Seguro:</label>
-        <select id="tipoSeguro" onchange="calcular()" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; cursor: pointer; outline: none; margin-top: 5px;">
+        <select id="tipoSeguro" onchange="calcular()">
             <option value="0">Plan Lite (Sin seguro)</option>
             <option value="2.10">Plan Inspección</option>
             <option value="3.45">Plan Estándar</option>
@@ -93,20 +91,15 @@
         <p id="total">$ 0,00</p>
     </div>
 
-    <!-- BOTÓN LIMPIAR -->
-    <button onclick="limpiar()" style="margin-top: 15px; background: #ffeded; color: #d9534f; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem; font-weight: bold; width: 100%;">
-        BORRAR
-    </button>
+    <button class="btn-limpiar" onclick="limpiar()">BORRAR TODO</button>
 
-    <p class="nota-final">Los montos incluyen cargos operativos.</p>
+    <p class="nota-final">Cotización dinámica según el monto.</p>
 </div>
 
 <script>
-   <script>
     function calcular() {
-        // --- CONFIGURACIÓN DE ESCALAS ---
-        const COTIZACION_BAJA = 1600;  // Cotización si es MENOR a 20 USD
-        const COTIZACION_ALTA = 1460;  // Cotización si es 20 USD o MÁS
+        const COTIZACION_BAJA = 1600;  
+        const COTIZACION_ALTA = 1460;  
         const CARGO_FIJO_USD = 2.06;
 
         const montoInput = document.getElementById('montoUser');
@@ -117,18 +110,10 @@
         const valorSeguro = parseFloat(seguroSelect.value);
 
         if (!isNaN(montoIngresado) && montoIngresado > 0) {
-            // 1. Elegimos qué cotización usar según el monto
-            let cotizacionAplicada;
-            if (montoIngresado < 20) {
-                cotizacionAplicada = COTIZACION_BAJA;
-            } else {
-                cotizacionAplicada = COTIZACION_ALTA;
-            }
+            // Lógica de cotización diferente por monto
+            let cotizacionAplicada = (montoIngresado < 20) ? COTIZACION_BAJA : COTIZACION_ALTA;
 
-            // 2. Sumamos: Monto + Cargo Fijo + Seguro (sin que se vea el valor)
             const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
-            
-            // 3. Multiplicamos por la cotización elegida
             const resultadoFinal = dolaresTotales * cotizacionAplicada;
 
             visor.innerText = resultadoFinal.toLocaleString('es-AR', {
@@ -137,7 +122,6 @@
                 minimumFractionDigits: 2
             });
             
-            // Efecto visual
             visor.style.transform = "scale(1.05)";
             setTimeout(() => visor.style.transform = "scale(1)", 100);
         } else {
@@ -151,3 +135,6 @@
         document.getElementById('total').innerText = "$ 0,00";
     }
 </script>
+
+</body>
+</html>
