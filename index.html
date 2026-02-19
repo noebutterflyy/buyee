@@ -70,7 +70,7 @@
 
      <!-- BOTÓN LIMPIAR -->
     <button onclick="limpiar()" style="margin-top: 15px; background: #ffeded; color: #d9534f; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem; font-weight: bold; width: 100%;">
-        BORRAR TODO
+        BORRAR
     </button>
 
     <p class="nota-final">Los montos incluyen cargos operativos.</p>
@@ -80,7 +80,7 @@
 function calcular() {
     const COTIZ_HASTA_10 = 1490;
     const COTIZ_MAS_DE_10 = 1465;
-    const COTIZ_MAS_DE_19 = 1455; // Ahora sí se usará
+    const COTIZ_MAS_DE_19 = 1455;
     const CARGO_FIJO_USD = 2.06;
 
     const input = document.getElementById('montoUser');
@@ -88,25 +88,24 @@ function calcular() {
     const monto = parseFloat(input.value);
 
     if (!isNaN(monto) && monto > 0) {
-        let cotizacion;
-        
-        // Lógica de escalas
-        if (monto > 19) {
-            cotizacion = COTIZ_MAS_DE_19;
-        } else if (monto > 10) {
-            cotizacion = COTIZ_MAS_DE_10;
-        } else {
-            cotizacion = COTIZ_HASTA_10;
-        }
+        // Lógica de escalas corregida
+        let cotizacion = COTIZ_HASTA_10;
+        if (monto > 19) cotizacion = COTIZ_MAS_DE_19;
+        else if (monto > 10) cotizacion = COTIZ_MAS_DE_10;
 
         const resultadoFinal = (monto + CARGO_FIJO_USD) * cotizacion;
 
         visor.innerText = resultadoFinal.toLocaleString('es-AR', {
             style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 2
+            currency: 'ARS'
         });
     } else {
         visor.innerText = "$ 0,00";
     }
+}
+
+// Esta es la función que hace funcionar el botón rojo
+function borrarTodo() {
+    document.getElementById('montoUser').value = "";
+    document.getElementById('total').innerText = "$ 0,00";
 }
