@@ -72,12 +72,10 @@
 </div>
 
 <script>
-<script>
 function calcular() {
-    // --- TUS COTIZACIONES ---
-    const COTIZ_HASTA_10 = 1490;  // Precio si es 10 o menos
-    const COTIZ_MAS_DE_10 = 1465; // Precio si supera los 10
-    const COTIZ_MAS_DE_19 = 1455; // Precio si supera los 19
+    const COTIZ_HASTA_10 = 1490;
+    const COTIZ_MAS_DE_10 = 1465;
+    const COTIZ_MAS_DE_19 = 1455; // Ahora sí se usará
     const CARGO_FIJO_USD = 2.06;
 
     const input = document.getElementById('montoUser');
@@ -85,10 +83,17 @@ function calcular() {
     const monto = parseFloat(input.value);
 
     if (!isNaN(monto) && monto > 0) {
-        // Elegimos la cotización según el monto
-        let cotizacion = (monto > 10) ? COTIZ_MAS_DE_10 : COTIZ_HASTA_10;
+        let cotizacion;
+        
+        // Lógica de escalas
+        if (monto > 19) {
+            cotizacion = COTIZ_MAS_DE_19;
+        } else if (monto > 10) {
+            cotizacion = COTIZ_MAS_DE_10;
+        } else {
+            cotizacion = COTIZ_HASTA_10;
+        }
 
-        // (Monto + Cargo Buyee) * Cotización elegida
         const resultadoFinal = (monto + CARGO_FIJO_USD) * cotizacion;
 
         visor.innerText = resultadoFinal.toLocaleString('es-AR', {
@@ -96,11 +101,7 @@ function calcular() {
             currency: 'ARS',
             minimumFractionDigits: 2
         });
-        
-        visor.style.transform = "scale(1.05)";
-        setTimeout(() => visor.style.transform = "scale(1)", 100);
     } else {
         visor.innerText = "$ 0,00";
     }
 }
-</script>
