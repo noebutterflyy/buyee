@@ -100,7 +100,8 @@
     function calcular() {
         // --- CONFIGURACIÓN DE COTIZACIONES ---
         const COTIZACION_SIN_SEGURO = 1500; // Ejemplo: Si elige Plan Lite
-        const COTIZACION_CON_SEGURO_BAJA = 1470; // Si es < 20 USD con seguro
+        const COTIZACION_CON_SEGURO_BAJA = 1470; // Si es < 10 USD con seguro
+        const COTIZACION_CON_SEGURO_MEDIA = 1465; // Si es > 11 USD con seguro
         const COTIZACION_CON_SEGURO_ALTA = 1460; // Si es >= 20 USD con seguro
         
         const CARGO_FIJO_USD = 2.06;
@@ -121,8 +122,10 @@
                 cotizacionAplicada = COTIZACION_SIN_SEGURO;
             } else {
                 // Si eligió alguno de los seguros (Inspección o Estándar)
-                if (montoIngresado < 20) {
+                if (montoIngresado < 10) {
                     cotizacionAplicada = COTIZACION_CON_SEGURO_BAJA;
+                if (montoIngresado > 11) {
+                    cotizacionAplicada = COTIZACION_CON_SEGURO_MEDIA;
                 } else {
                     cotizacionAplicada = COTIZACION_CON_SEGURO_ALTA;
                 }
