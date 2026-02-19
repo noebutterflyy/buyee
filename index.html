@@ -6,7 +6,7 @@
     <title>noe.butterflyy 🦋</title>
     <style>
         :root {
-            --color-fondo: #B2FFFF;
+            --color-fondo: #B2FFFF;       /* Celeste que elegiste */
             --color-tarjeta: #ffffff;
             --color-boton: #007bff;
             --color-resultado: #288ea7;
@@ -27,11 +27,12 @@
             width: 90%; max-width: 350px; text-align: center; 
         }
 
+        /* ESTILO PARA TU LOGO ACHICADO */
         .logo {
-            width: 150px;
+            width: 150px; /* Tamaño ideal */
             height: auto;
             margin-bottom: 10px;
-            border-radius: 15px;
+            border-radius: 15px; /* Bordes un poco redondeados */
         }
 
         h1 { font-size: 1.4rem; margin-bottom: 10px; color: #288ea7; }
@@ -40,50 +41,34 @@
         .input-group { text-align: left; margin-bottom: 20px; }
         label { font-size: 0.8rem; font-weight: bold; margin-left: 5px; color: #555; }
 
-        input, select { 
+        input { 
             width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; 
-            font-size: 18px; text-align: center; outline: none; box-sizing: border-box;
-            transition: 0.3s; font-family: inherit;
+            font-size: 20px; text-align: center; outline: none; box-sizing: border-box;
+            transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--color-resultado); }
+        input:focus { border-color: var(--color-boton); }
 
         .res-container { 
-            margin-top: 20px; padding: 20px; background: #f0fbfc; 
+            margin-top: 25px; padding: 20px; background: #f0fbfc; 
             border-radius: 20px; border: 2px dashed var(--color-resultado); 
         }
 
-        #total { font-size: 2.2rem; font-weight: bold; color: var(--color-resultado); margin: 10px 0 0 0; transition: transform 0.1s; }
-
-        .btn-limpiar {
-            margin-top: 15px; background: #ffeded; color: #d9534f; border: none;
-            padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem;
-            font-weight: bold; transition: 0.3s; width: 100%;
-        }
-        .btn-limpiar:hover { background: #f2dede; }
-        
+        #total { font-size: 2.2rem; font-weight: bold; color: var(--color-resultado); margin: 10px 0 0 0; }
         .nota-final { font-size: 0.7rem; color: #999; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="card">
+    <!-- IMAGEN CON TAMAÑO CORREGIDO -->
     <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
-    <p class="descripcion">Ingresá el monto del ítem. El total incluye el cargo fijo de servicio y el seguro de Buyee.</p>
+    <p class="descripcion">Ingresá el monto en USD del ítem que te interesa comprar. La cotización en pesos ya incluye el costo de servicio que cobra buyee en cada compra.</p>
     
     <div class="input-group">
-        <label>Monto del ítem (USD):</label>
+        <label>Monto a enviar (USD):</label>
         <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
-    </div>
-
-    <div class="input-group">
-        <label>Tipo de Plan / Seguro:</label>
-        <select id="tipoSeguro" onchange="calcular()">
-            <option value="0">Plan Lite (Sin seguro)</option>
-            <option value="2.10">Plan Inspección</option>
-            <option value="3.45">Plan Estándar</option>
-        </select>
     </div>
 
     <div class="res-container">
@@ -91,67 +76,37 @@
         <p id="total">$ 0,00</p>
     </div>
 
-    <button class="btn-limpiar" onclick="limpiar()">BORRAR TODO</button>
-
-    <p class="nota-final">Cotización dinámica según el monto.</p>
+    <p class="nota-final">Los montos incluyen cargos operativos.</p>
 </div>
 
 <script>
-<script>
-    function calcular() {
-        // --- CONFIGURACIÓN DE COTIZACIONES ---
-        const COTIZACION_PLAN_LITE = 1500;      // Si elige Plan Lite (sin seguro)
-        const COTIZACION_SEGURO_MENOR_10 = 1470; // Con seguro y menos de 10 USD
-        const COTIZACION_SEGURO_10_A_20 = 1465;  // Con seguro y entre 10 y 20 USD
-        const COTIZACION_SEGURO_MAYOR_20 = 1460; // Con seguro y 20 USD o más
+function calcular() {
+    // Configuración fácil de editar
+    const COTIZACION_PESOS = 1465; 
+    const CARGO_FIJO_USD = 2.06;
+
+    const input = document.getElementById('montoUser');
+    const visor = document.getElementById('total');
+    
+    // Convertimos el valor asegurando que sea un número válido
+    const montoIngresado = parseFloat(input.value);
+
+    if (!isNaN(montoIngresado) && montoIngresado > 0) {
+        const dolaresTotales = montoIngresado + CARGO_FIJO_USD;
+        const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
+
+        // Formateo con moneda argentina
+        visor.innerText = resultadoFinal.toLocaleString('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+            minimumFractionDigits: 2
+        });
         
-        const CARGO_FIJO_USD = 2.06;
-
-        const montoInput = document.getElementById('montoUser');
-        const seguroSelect = document.getElementById('tipoSeguro');
-        const visor = document.getElementById('total');
-
-        const montoIngresado = parseFloat(montoInput.value);
-        const valorSeguro = parseFloat(seguroSelect.value);
-
-        if (!isNaN(montoIngresado) && montoIngresado > 0) {
-            let cotizacionAplicada;
-
-            // 1. Lógica para Plan Lite (Sin seguro)
-            if (valorSeguro === 0) {
-                cotizacionAplicada = COTIZACION_PLAN_LITE;
-            } 
-            // 2. Lógica para planes CON seguro (Inspección o Estándar)
-            else {
-                if (montoIngresado < 10) {
-                    cotizacionAplicada = COTIZACION_SEGURO_MENOR_10;
-                } else if (montoIngresado >= 10 && montoIngresado < 20) {
-                    cotizacionAplicada = COTIZACION_SEGURO_10_A_20;
-                } else {
-                    cotizacionAplicada = COTIZACION_SEGURO_MAYOR_20;
-                }
-            }
-
-            // Cálculo: (Monto + Cargo Buyee + Seguro) * Cotización elegida
-            const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
-            const resultadoFinal = dolaresTotales * cotizacionAplicada;
-
-            visor.innerText = resultadoFinal.toLocaleString('es-AR', {
-                style: 'currency',
-                currency: 'ARS',
-                minimumFractionDigits: 2
-            });
-            
-            visor.style.transform = "scale(1.05)";
-            setTimeout(() => visor.style.transform = "scale(1)", 100);
-        } else {
-            visor.innerText = "$ 0,00";
-        }
+        // Efecto de "salto" visual al cambiar
+        visor.style.transform = "scale(1.05)";
+        setTimeout(() => visor.style.transform = "scale(1)", 100);
+    } else {
+        visor.innerText = "$ 0,00";
     }
-
-    function limpiar() {
-        document.getElementById('montoUser').value = "";
-        document.getElementById('tipoSeguro').selectedIndex = 0;
-        document.getElementById('total').innerText = "$ 0,00";
-    }
-</script>
+}
+ 
