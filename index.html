@@ -97,9 +97,13 @@
 </div>
 
 <script>
+<script>
     function calcular() {
-        const COTIZACION_BAJA = 1600;  
-        const COTIZACION_ALTA = 1460;  
+        // --- CONFIGURACIÓN DE COTIZACIONES ---
+        const COTIZACION_SIN_SEGURO = 1500; // Ejemplo: Si elige Plan Lite
+        const COTIZACION_CON_SEGURO_BAJA = 1470; // Si es < 20 USD con seguro
+        const COTIZACION_CON_SEGURO_ALTA = 1460; // Si es >= 20 USD con seguro
+        
         const CARGO_FIJO_USD = 2.06;
 
         const montoInput = document.getElementById('montoUser');
@@ -110,9 +114,22 @@
         const valorSeguro = parseFloat(seguroSelect.value);
 
         if (!isNaN(montoIngresado) && montoIngresado > 0) {
-            // Lógica de cotización diferente por monto
-            let cotizacionAplicada = (montoIngresado < 20) ? COTIZACION_BAJA : COTIZACION_ALTA;
+            let cotizacionAplicada;
 
+            // Lógica de decisión
+            if (valorSeguro === 0) {
+                // Si el valor del seguro es 0 (Plan Lite)
+                cotizacionAplicada = COTIZACION_SIN_SEGURO;
+            } else {
+                // Si eligió alguno de los seguros (Inspección o Estándar)
+                if (montoIngresado < 20) {
+                    cotizacionAplicada = COTIZACION_CON_SEGURO_BAJA;
+                } else {
+                    cotizacionAplicada = COTIZACION_CON_SEGURO_ALTA;
+                }
+            }
+
+            // Cálculo final interno
             const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
             const resultadoFinal = dolaresTotales * cotizacionAplicada;
 
@@ -122,6 +139,7 @@
                 minimumFractionDigits: 2
             });
             
+            // Animación de actualización
             visor.style.transform = "scale(1.05)";
             setTimeout(() => visor.style.transform = "scale(1)", 100);
         } else {
@@ -135,6 +153,3 @@
         document.getElementById('total').innerText = "$ 0,00";
     }
 </script>
-
-</body>
-</html>
