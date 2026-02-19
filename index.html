@@ -3,39 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversor Manual USD a ARS</title>
+    <title>Calculadora de Dólares</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9; margin: 0; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 320px; }
-        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
-        label { display: block; font-size: 0.9rem; margin-bottom: 5px; color: #555; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
-        .res-box { background: #eef2f7; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #3498db; }
-        .res-text { font-size: 1.4rem; font-weight: bold; color: #2980b9; }
+        /* Diseño moderno para celulares */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 350px; }
+        h1 { font-size: 1.5rem; color: #333; text-align: center; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; /* Evita zoom automático en iPhone */ }
+        .resultado-container { background: #e8f5e9; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; }
+        #resultado { color: #2e7d32; margin: 0; font-size: 1.8rem; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
+
 <div class="card">
-    <h2>Conversor Manual</h2>
-    <label>Precio del Dólar (ej: 1440)</label>
-    <input type="number" id="tasa" placeholder="Ingresa cotización" oninput="calcular()">
-    <label>Monto en Dólares (USD)</label>
-    <input type="number" id="monto" placeholder="Ingresa cantidad" oninput="calcular()">
-    <div class="res-box">
-        <span class="res-text" id="resultado">$ 0,00</span><br>
-        <small>Total en Pesos</small>
+    <h1>Conversor de USD</h1>
+    
+    <label>Monto en Dólares:</label>
+    <input type="number" id="usd" placeholder="¿Cuántos dólares?" oninput="calcular()">
+
+    <label>Cotización (Pesos):</label>
+    <input type="number" id="tasa" placeholder="Ej: 1100" oninput="calcular()">
+
+    <div class="resultado-container">
+        <span>Total en Pesos:</span>
+        <h2 id="resultado">$ 0,00</h2>
+    </div>
+
+    <div class="footer">
+        Cálculo manual en tiempo real
     </div>
 </div>
+
 <script>
     function calcular() {
-        const t = document.getElementById('tasa').value;
-        const m = document.getElementById('monto').value;
-        const res = document.getElementById('resultado');
-        if(t > 0 && m > 0) {
-            const total = t * m;
-            res.innerText = total.toLocaleString('es-AR', {style: 'currency', currency: 'ARS'});
-        } else { res.innerText = "$ 0,00"; }
+        const usd = document.getElementById('usd').value;
+        const tasa = document.getElementById('tasa').value;
+        const display = document.getElementById('resultado');
+
+        if (usd > 0 && tasa > 0) {
+            const total = usd * tasa;
+            display.innerText = new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS'
+            }).format(total);
+        } else {
+            display.innerText = "$ 0,00";
+        }
     }
 </script>
+
 </body>
 </html>
