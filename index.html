@@ -1,21 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>noe.butterflyy 🦋</title>
+    <style>
+        :root {
+            --color-fondo: #B2FFFF;
+            --color-tarjeta: #ffffff;
+            --color-boton: #007bff;
+            --color-resultado: #288ea7;
+            --color-texto: #333333;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--color-fondo); 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; color: var(--color-texto);
+        }
+
+        .card { 
+            background: var(--color-tarjeta); 
+            padding: 30px; border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            width: 90%; max-width: 350px; text-align: center; 
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 15px;
+        }
+
+        h1 { font-size: 1.4rem; margin-bottom: 10px; color: #288ea7; }
+        p.descripcion { font-size: 0.85rem; color: #666; margin-bottom: 25px; line-height: 1.4; }
+
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { font-size: 0.8rem; font-weight: bold; margin-left: 5px; color: #555; }
+
+        input, select { 
+            width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; 
+            font-size: 18px; text-align: center; outline: none; box-sizing: border-box;
+            transition: 0.3s; font-family: inherit;
+        }
+        input:focus, select:focus { border-color: var(--color-resultado); }
+
+        .res-container { 
+            margin-top: 20px; padding: 20px; background: #f0fbfc; 
+            border-radius: 20px; border: 2px dashed var(--color-resultado); 
+        }
+
+        #total { font-size: 2.2rem; font-weight: bold; color: var(--color-resultado); margin: 10px 0 0 0; transition: transform 0.1s; }
+
+        .btn-limpiar {
+            margin-top: 15px; background: #ffeded; color: #d9534f; border: none;
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 0.8rem;
+            font-weight: bold; transition: 0.3s; width: 100%;
+        }
+        .btn-limpiar:hover { background: #f2dede; }
+        
+        .nota-final { font-size: 0.7rem; color: #999; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
 <div class="card">
-    <!-- LOGO -->
     <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
-    <p class="descripcion">Ingresá el monto en USD del ítem. La cotización ya incluye el costo de servicio de Buyee.</p>
+    <p class="descripcion">Ingresá el monto en USD del ítem. La cotización incluye el cargo fijo de Buyee y el seguro elegido.</p>
     
-    <!-- CAMPO DE MONTO (ESTO FALTABA) -->
+    <!-- CAMPO PARA INGRESAR EL MONTO -->
     <div class="input-group">
-        <label>Monto del producto (USD):</label>
+        <label>Monto del ítem (USD):</label>
         <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
     </div>
 
-    <!-- SELECCIÓN DE SEGURO -->
+    <!-- CAMPO PARA ELEGIR EL SEGURO -->
     <div class="input-group">
         <label>Tipo de Plan / Seguro:</label>
-        <select id="tipoSeguro" onchange="calcular()" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; cursor: pointer; outline: none; margin-top: 5px;">
-            <option value="0">Plan Lite (Gratis - Sin seguro)</option>
+        <select id="tipoSeguro" onchange="calcular()">
+            <option value="0">Plan Lite (Gratis)</option>
             <option value="2.10">Plan Inspección (+2.10 USD)</option>
             <option value="3.45">Plan Estándar (+3.45 USD)</option>
         </select>
@@ -26,35 +93,48 @@
         <p id="total">$ 0,00</p>
     </div>
 
-    <p class="nota-final">Los montos incluyen cargos operativos.</p>
+    <button class="btn-limpiar" onclick="limpiar()">BORRAR TODO</button>
+
+    <p class="nota-final">Cotización actual: $1460 (Sujeto a cambios)</p>
 </div>
 
 <script>
-function calcular() {
-    const COTIZACION_PESOS = 1460; 
-    const CARGO_FIJO_USD = 2.06;
+    function calcular() {
+        const COTIZACION_PESOS = 1460; 
+        const CARGO_FIJO_USD = 2.06;
 
-    // Buscamos los valores
-    const inputMonto = document.getElementById('montoUser');
-    const montoIngresado = parseFloat(inputMonto.value);
-    const valorSeguro = parseFloat(document.getElementById('tipoSeguro').value);
-    const visor = document.getElementById('total');
+        const montoInput = document.getElementById('montoUser');
+        const seguroSelect = document.getElementById('tipoSeguro');
+        const visor = document.getElementById('total');
 
-    if (!isNaN(montoIngresado) && montoIngresado > 0) {
-        // Cuenta: (Producto + Comisión + Seguro) * Blue
-        const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
-        const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
+        const montoIngresado = parseFloat(montoInput.value);
+        const valorSeguro = parseFloat(seguroSelect.value);
 
-        visor.innerText = resultadoFinal.toLocaleString('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 2
-        });
-        
-        visor.style.transform = "scale(1.05)";
-        setTimeout(() => visor.style.transform = "scale(1)", 100);
-    } else {
-        visor.innerText = "$ 0,00";
+        if (!isNaN(montoIngresado) && montoIngresado > 0) {
+            // (Monto + Cargo Fijo + Seguro) * Cotización
+            const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
+            const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
+
+            visor.innerText = resultadoFinal.toLocaleString('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 2
+            });
+            
+            // Animación pequeña
+            visor.style.transform = "scale(1.05)";
+            setTimeout(() => visor.style.transform = "scale(1)", 100);
+        } else {
+            visor.innerText = "$ 0,00";
+        }
     }
-}
+
+    function limpiar() {
+        document.getElementById('montoUser').value = "";
+        document.getElementById('tipoSeguro').selectedIndex = 0;
+        document.getElementById('total').innerText = "$ 0,00";
+    }
 </script>
+
+</body>
+</html>
