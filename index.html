@@ -85,10 +85,10 @@ function calcular() {
 
     const input = document.getElementById('montoUser');
     const visor = document.getElementById('total');
-    const monto = parseFloat(input.value);
+    let monto = parseFloat(input.value);
 
     if (!isNaN(monto) && monto > 0) {
-        // Lógica de escalas corregida
+        // Determinación de la tasa según el monto
         let cotizacion = COTIZ_HASTA_10;
         if (monto > 19) cotizacion = COTIZ_MAS_DE_19;
         else if (monto > 10) cotizacion = COTIZ_MAS_DE_10;
@@ -97,15 +97,16 @@ function calcular() {
 
         visor.innerText = resultadoFinal.toLocaleString('es-AR', {
             style: 'currency',
-            currency: 'ARS'
+            currency: 'ARS',
+            minimumFractionDigits: 2
         });
     } else {
         visor.innerText = "$ 0,00";
     }
 }
 
-// Esta es la función que hace funcionar el botón rojo
-function borrarTodo() {
+// Cambié el nombre para que coincida con el 'onclick' del botón
+function limpiar() {
     document.getElementById('montoUser').value = "";
     document.getElementById('total').innerText = "$ 0,00";
 }
