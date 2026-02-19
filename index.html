@@ -72,17 +72,23 @@
 </div>
 
 <script>
+<script>
 function calcular() {
-    const COTIZACION_PESOS = 1465; 
+    // --- TUS COTIZACIONES ---
+    const COTIZ_HASTA_10 = 1490;  // Precio si es 10 o menos
+    const COTIZ_MAS_DE_10 = 1460; // Precio si supera los 10
     const CARGO_FIJO_USD = 2.06;
 
     const input = document.getElementById('montoUser');
     const visor = document.getElementById('total');
-    const montoIngresado = parseFloat(input.value);
+    const monto = parseFloat(input.value);
 
-    if (!isNaN(montoIngresado) && montoIngresado > 0) {
-        const dolaresTotales = montoIngresado + CARGO_FIJO_USD;
-        const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
+    if (!isNaN(monto) && monto > 0) {
+        // Elegimos la cotización según el monto
+        let cotizacion = (monto > 10) ? COTIZ_MAS_DE_10 : COTIZ_HASTA_10;
+
+        // (Monto + Cargo Buyee) * Cotización elegida
+        const resultadoFinal = (monto + CARGO_FIJO_USD) * cotizacion;
 
         visor.innerText = resultadoFinal.toLocaleString('es-AR', {
             style: 'currency',
@@ -97,6 +103,3 @@ function calcular() {
     }
 }
 </script>
-
-</body>
-</html>
