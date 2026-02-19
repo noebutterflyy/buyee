@@ -3,58 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Dólares</title>
+    <title>Calculadora Privada</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        h1 { color: #333; font-size: 1.4rem; }
-        .input-group { margin: 20px 0; text-align: left; }
-        label { font-weight: bold; color: #666; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 18px; }
-        .resultado-box { background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; margin-top: 10px; }
-        #resultado { margin: 5px 0 0 0; font-size: 1.8rem; }
-        .cotizacion-fija { font-size: 0.9rem; color: #888; margin-top: 10px; }
+        body { font-family: -apple-system, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; max-width: 320px; text-align: center; }
+        label { font-size: 0.9rem; color: #555; font-weight: bold; margin-bottom: 10px; display: block; }
+        input { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 22px; text-align: center; outline: none; box-sizing: border-box; }
+        input:focus { border-color: #007bff; }
+        .resultado-box { margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 15px; border: 1px solid #eee; }
+        #resultado { font-size: 2.2rem; font-weight: bold; color: #1a1a1a; margin: 0; }
+        small { color: #888; font-size: 0.75rem; margin-top: 10px; display: block; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Conversor USD a Pesos</h1>
-    
-    <div class="input-group">
-        <label>Cantidad de Dólares:</label>
-        <input type="number" id="usd" placeholder="Escribí el monto aquí" oninput="calcular()">
-    </div>
-
-    <!-- El valor de la cotización está oculto o fijo aquí -->
-    <input type="hidden" id="tasa" value="1490">
+    <label>Ingrese el monto (USD)</label>
+    <input type="number" id="montoInput" placeholder="0" oninput="calcular()">
 
     <div class="resultado-box">
-        <span>Total en Pesos:</span>
-        <h2 id="resultado">$ 0,00</h2>
+        <p id="resultado">$ 0,00</p>
     </div>
-
-    <p class="cotizacion-fija">Cotización fijada en: <strong id="val-tasa"></strong></p>
+    <small>Cálculo automático final</small>
 </div>
 
 <script>
-    // Mostramos la tasa fija en el texto para que la gente sepa cuánto es
-    const tasaFija = document.getElementById('tasa').value;
-    document.getElementById('val-tasa').innerText = "$" + tasaFija;
+    // --- CONFIGURACIÓN PRIVADA ---
+    const COTIZACION_BASE = 1150; // Cambiá este número por tu cotización actual
+    const CARGO_EXTRA = 2.06;     // Los $2,06 que siempre se suman
 
     function calcular() {
-        const usd = document.getElementById('usd').value;
-        const tasa = document.getElementById('tasa').value;
-        const display = document.getElementById('resultado');
+        const usd = document.getElementById('montoInput').value;
+        const visor = document.getElementById('resultado');
 
         if (usd > 0) {
-            const total = usd * tasa;
-            display.innerText = new Intl.NumberFormat('es-AR', {
+            // Lógica: (Dólares * Cotización) + 2.06
+            const totalFinal = (usd * COTIZACION_BASE) + CARGO_EXTRA;
+            
+            visor.innerText = new Intl.NumberFormat('es-AR', {
                 style: 'currency',
-                currency: 'ARS'
-            }).format(total);
+                currency: 'ARS',
+                minimumFractionDigits: 2
+            }).format(totalFinal);
         } else {
-            display.innerText = "$ 0,00";
+            visor.innerText = "$ 0,00";
         }
     }
 </script>
