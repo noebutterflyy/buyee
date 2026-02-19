@@ -70,47 +70,50 @@
     <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
-    <p class="descripcion">Ingresá el monto en USD del ítem. La cotización incluye el cargo fijo de Buyee y el seguro elegido.</p>
+    <p class="descripcion">Ingresá el monto del ítem. El total incluye el cargo de servicio y el seguro seleccionado.</p>
     
-    <!-- CAMPO PARA INGRESAR EL MONTO -->
+    <!-- MONTO EN USD -->
     <div class="input-group">
         <label>Monto del ítem (USD):</label>
         <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
     </div>
 
-<!-- CAMPO PARA ELEGIR EL SEGURO (MONTOS OCULTOS) -->
-<div class="input-group">
-    <label>Tipo de Plan / Seguro:</label>
-    <select id="tipoSeguro" onchange="calcular()">
-        <option value="0">Plan Lite (Gratis)</option>
-        <option value="2.11">Plan Inspección</option>
-        <option value="3.45">Plan Estándar</option>
-    </select>
-</div>
+    <!-- SEGURO (MONTOS OCULTOS AL USUARIO) -->
+    <div class="input-group">
+        <label>Tipo de Plan / Seguro:</label>
+        <select id="tipoSeguro" onchange="calcular()" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; cursor: pointer; outline: none; margin-top: 5px;">
+            <option value="0">Plan Lite (Sin seguro)</option>
+            <option value="2.10">Plan Inspección</option>
+            <option value="3.45">Plan Estándar</option>
+        </select>
+    </div>
 
-<div class="res-container">
-    <span style="font-size: 0.8rem; font-weight: bold;">TOTAL A PAGAR:</span>
-    <p id="total">$ 0,00</p>
-</div>
+    <div class="res-container">
+        <span style="font-size: 0.8rem; font-weight: bold;">TOTAL A PAGAR:</span>
+        <p id="total">$ 0,00</p>
+    </div>
 
-<!-- BOTÓN LIMPIAR -->
-<button class="btn-limpiar" onclick="limpiar()" style="margin-top: 15px; background: #ffeded; color: #d9534f; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem; font-weight: bold; width: 100%;">
-    BORRAR TODO
-</button>
+    <!-- BOTÓN LIMPIAR -->
+    <button onclick="limpiar()" style="margin-top: 15px; background: #ffeded; color: #d9534f; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem; font-weight: bold; width: 100%;">
+        BORRAR TODO
+    </button>
+
+    <p class="nota-final">Los montos incluyen cargos operativos.</p>
+</div>
 
 <script>
     function calcular() {
-        const COTIZACION_PESOS = 1460; 
+        const COTIZACION_PESOS = 1480; 
         const CARGO_FIJO_USD = 2.06;
 
         const montoInput = document.getElementById('montoUser');
-        const valorSeguro = parseFloat(document.getElementById('tipoSeguro').value);
+        const seguroSelect = document.getElementById('tipoSeguro');
         const visor = document.getElementById('total');
 
         const montoIngresado = parseFloat(montoInput.value);
+        const valorSeguro = parseFloat(seguroSelect.value);
 
         if (!isNaN(montoIngresado) && montoIngresado > 0) {
-            // La suma interna sigue usando 2.10 o 3.45 según el plan de Buyee
             const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
             const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
 
