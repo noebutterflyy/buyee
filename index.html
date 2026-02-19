@@ -53,7 +53,7 @@
 <body>
 
 <div class="card">
-    <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+    <img src="https://via.placeholder.com" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
     <p class="descripcion">Ingresá el monto en USD del ítem que te interesa comprar. La cotización en pesos ya incluye el costo de servicio que cobra buyee en cada compra.</p>
@@ -68,7 +68,6 @@
         <p id="total">$ 0,00</p>
     </div>
 
-     <!-- BOTÓN LIMPIAR -->
     <button onclick="limpiar()" style="margin-top: 15px; background: #ffeded; color: #d9534f; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.8rem; font-weight: bold; width: 100%;">
         BORRAR
     </button>
@@ -88,7 +87,6 @@ function calcular() {
     let monto = parseFloat(input.value);
 
     if (!isNaN(monto) && monto > 0) {
-        // Determinación de la tasa según el monto
         let cotizacion = COTIZ_HASTA_10;
         if (monto > 19) cotizacion = COTIZ_MAS_DE_19;
         else if (monto > 10) cotizacion = COTIZ_MAS_DE_10;
@@ -105,8 +103,11 @@ function calcular() {
     }
 }
 
-// Cambié el nombre para que coincida con el 'onclick' del botón
 function limpiar() {
     document.getElementById('montoUser').value = "";
     document.getElementById('total').innerText = "$ 0,00";
 }
+</script>
+
+</body>
+</html>
