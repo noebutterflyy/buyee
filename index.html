@@ -102,8 +102,11 @@
 </div>
 
 <script>
+   <script>
     function calcular() {
-        const COTIZACION_PESOS = 1480; 
+        // --- CONFIGURACIÓN DE ESCALAS ---
+        const COTIZACION_BAJA = 1600;  // Cotización si es MENOR a 20 USD
+        const COTIZACION_ALTA = 1460;  // Cotización si es 20 USD o MÁS
         const CARGO_FIJO_USD = 2.06;
 
         const montoInput = document.getElementById('montoUser');
@@ -114,14 +117,29 @@
         const valorSeguro = parseFloat(seguroSelect.value);
 
         if (!isNaN(montoIngresado) && montoIngresado > 0) {
+            // 1. Elegimos qué cotización usar según el monto
+            let cotizacionAplicada;
+            if (montoIngresado < 20) {
+                cotizacionAplicada = COTIZACION_BAJA;
+            } else {
+                cotizacionAplicada = COTIZACION_ALTA;
+            }
+
+            // 2. Sumamos: Monto + Cargo Fijo + Seguro (sin que se vea el valor)
             const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
-            const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
+            
+            // 3. Multiplicamos por la cotización elegida
+            const resultadoFinal = dolaresTotales * cotizacionAplicada;
 
             visor.innerText = resultadoFinal.toLocaleString('es-AR', {
                 style: 'currency',
                 currency: 'ARS',
                 minimumFractionDigits: 2
             });
+            
+            // Efecto visual
+            visor.style.transform = "scale(1.05)";
+            setTimeout(() => visor.style.transform = "scale(1)", 100);
         } else {
             visor.innerText = "$ 0,00";
         }
