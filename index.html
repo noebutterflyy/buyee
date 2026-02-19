@@ -97,12 +97,13 @@
 </div>
 
 <script>
+<script>
     function calcular() {
         // --- CONFIGURACIÓN DE COTIZACIONES ---
-        const COTIZACION_SIN_SEGURO = 1500; // Ejemplo: Si elige Plan Lite
-        const COTIZACION_CON_SEGURO_BAJA = 1470; // Si es < 10 USD con seguro
-        const COTIZACION_CON_SEGURO_MEDIA = 1465; // Si es > 11 USD con seguro
-        const COTIZACION_CON_SEGURO_ALTA = 1460; // Si es >= 20 USD con seguro
+        const COTIZACION_PLAN_LITE = 1500;      // Si elige Plan Lite (sin seguro)
+        const COTIZACION_SEGURO_MENOR_10 = 1470; // Con seguro y menos de 10 USD
+        const COTIZACION_SEGURO_10_A_20 = 1465;  // Con seguro y entre 10 y 20 USD
+        const COTIZACION_SEGURO_MAYOR_20 = 1460; // Con seguro y 20 USD o más
         
         const CARGO_FIJO_USD = 2.06;
 
@@ -116,22 +117,22 @@
         if (!isNaN(montoIngresado) && montoIngresado > 0) {
             let cotizacionAplicada;
 
-            // Lógica de decisión
+            // 1. Lógica para Plan Lite (Sin seguro)
             if (valorSeguro === 0) {
-                // Si el valor del seguro es 0 (Plan Lite)
-                cotizacionAplicada = COTIZACION_SIN_SEGURO;
-            } else {
-                // Si eligió alguno de los seguros (Inspección o Estándar)
+                cotizacionAplicada = COTIZACION_PLAN_LITE;
+            } 
+            // 2. Lógica para planes CON seguro (Inspección o Estándar)
+            else {
                 if (montoIngresado < 10) {
-                    cotizacionAplicada = COTIZACION_CON_SEGURO_BAJA;
-                if (montoIngresado > 11) {
-                    cotizacionAplicada = COTIZACION_CON_SEGURO_MEDIA;
+                    cotizacionAplicada = COTIZACION_SEGURO_MENOR_10;
+                } else if (montoIngresado >= 10 && montoIngresado < 20) {
+                    cotizacionAplicada = COTIZACION_SEGURO_10_A_20;
                 } else {
-                    cotizacionAplicada = COTIZACION_CON_SEGURO_ALTA;
+                    cotizacionAplicada = COTIZACION_SEGURO_MAYOR_20;
                 }
             }
 
-            // Cálculo final interno
+            // Cálculo: (Monto + Cargo Buyee + Seguro) * Cotización elegida
             const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
             const resultadoFinal = dolaresTotales * cotizacionAplicada;
 
@@ -141,7 +142,6 @@
                 minimumFractionDigits: 2
             });
             
-            // Animación de actualización
             visor.style.transform = "scale(1.05)";
             setTimeout(() => visor.style.transform = "scale(1)", 100);
         } else {
