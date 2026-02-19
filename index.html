@@ -1,79 +1,25 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>noe.butterflyy 🦋</title>
-    <style>
-        :root {
-            --color-fondo: #B2FFFF;       /* Celeste que elegiste */
-            --color-tarjeta: #ffffff;
-            --color-boton: #007bff;
-            --color-resultado: #288ea7;
-            --color-texto: #333333;
-        }
-
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--color-fondo); 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0; color: var(--color-texto);
-        }
-
-        .card { 
-            background: var(--color-tarjeta); 
-            padding: 30px; border-radius: 25px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 90%; max-width: 350px; text-align: center; 
-        }
-
-        /* ESTILO PARA TU LOGO ACHICADO */
-        .logo {
-            width: 150px; /* Tamaño ideal */
-            height: auto;
-            margin-bottom: 10px;
-            border-radius: 15px; /* Bordes un poco redondeados */
-        }
-
-        h1 { font-size: 1.4rem; margin-bottom: 10px; color: #288ea7; }
-        p.descripcion { font-size: 0.85rem; color: #666; margin-bottom: 25px; line-height: 1.4; }
-
-        .input-group { text-align: left; margin-bottom: 20px; }
-        label { font-size: 0.8rem; font-weight: bold; margin-left: 5px; color: #555; }
-
-        input { 
-            width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; 
-            font-size: 20px; text-align: center; outline: none; box-sizing: border-box;
-            transition: 0.3s;
-        }
-        input:focus { border-color: var(--color-boton); }
-
-        .res-container { 
-            margin-top: 25px; padding: 20px; background: #f0fbfc; 
-            border-radius: 20px; border: 2px dashed var(--color-resultado); 
-        }
-
-        #total { font-size: 2.2rem; font-weight: bold; color: var(--color-resultado); margin: 10px 0 0 0; }
-        .nota-final { font-size: 0.7rem; color: #999; margin-top: 20px; }
-    </style>
-</head>
-<body>
-
 <div class="card">
-    <!-- IMAGEN CON TAMAÑO CORREGIDO -->
+    <!-- LOGO -->
     <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
-    <p class="descripcion">Ingresá el monto en USD del ítem que te interesa comprar. La cotización en pesos ya incluye el costo de servicio que cobra buyee en cada compra.</p>
+    <p class="descripcion">Ingresá el monto en USD del ítem. La cotización ya incluye el costo de servicio de Buyee.</p>
     
-<div class="input-group">
-    <label>Tipo de Plan / Seguro:</label>
-    <select id="tipoSeguro" onchange="calcular()" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; cursor: pointer; outline: none; margin-top: 5px;">
-        <option value="0">Plan Lite (Gratis - Sin seguro)</option>
-        <option value="2.10">Plan Inspección </option>
-        <option value="3.45">Plan Estándar </option>
-    </select>
-</div>
+    <!-- CAMPO DE MONTO (ESTO FALTABA) -->
+    <div class="input-group">
+        <label>Monto del producto (USD):</label>
+        <input type="number" id="montoUser" placeholder="0.00" oninput="calcular()">
+    </div>
+
+    <!-- SELECCIÓN DE SEGURO -->
+    <div class="input-group">
+        <label>Tipo de Plan / Seguro:</label>
+        <select id="tipoSeguro" onchange="calcular()" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; cursor: pointer; outline: none; margin-top: 5px;">
+            <option value="0">Plan Lite (Gratis - Sin seguro)</option>
+            <option value="2.10">Plan Inspección (+2.10 USD)</option>
+            <option value="3.45">Plan Estándar (+3.45 USD)</option>
+        </select>
+    </div>
 
     <div class="res-container">
         <span style="font-size: 0.8rem; font-weight: bold;">TOTAL A PAGAR:</span>
@@ -84,16 +30,18 @@
 </div>
 
 <script>
-    function calcular() {
+function calcular() {
     const COTIZACION_PESOS = 1460; 
     const CARGO_FIJO_USD = 2.06;
 
-    const montoIngresado = parseFloat(document.getElementById('montoUser').value);
+    // Buscamos los valores
+    const inputMonto = document.getElementById('montoUser');
+    const montoIngresado = parseFloat(inputMonto.value);
     const valorSeguro = parseFloat(document.getElementById('tipoSeguro').value);
     const visor = document.getElementById('total');
 
     if (!isNaN(montoIngresado) && montoIngresado > 0) {
-        // Sumamos: Monto + Cargo Fijo + Seguro Elegido
+        // Cuenta: (Producto + Comisión + Seguro) * Blue
         const dolaresTotales = montoIngresado + CARGO_FIJO_USD + valorSeguro;
         const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
 
@@ -103,11 +51,10 @@
             minimumFractionDigits: 2
         });
         
-        // Efecto visual
-        visor.style.transition = "transform 0.1s";
         visor.style.transform = "scale(1.05)";
         setTimeout(() => visor.style.transform = "scale(1)", 100);
     } else {
         visor.innerText = "$ 0,00";
     }
 }
+</script>
