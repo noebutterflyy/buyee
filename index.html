@@ -6,7 +6,7 @@
     <title>noe.butterflyy 🦋</title>
     <style>
         :root {
-            --color-fondo: #B2FFFF;       /* Celeste que elegiste */
+            --color-fondo: #B2FFFF;
             --color-tarjeta: #ffffff;
             --color-boton: #007bff;
             --color-resultado: #288ea7;
@@ -27,14 +27,7 @@
             width: 90%; max-width: 350px; text-align: center; 
         }
 
-        /* ESTILO PARA TU LOGO ACHICADO */
-        .logo {
-            width: 150px; /* Tamaño ideal */
-            height: auto;
-            margin-bottom: 10px;
-            border-radius: 15px; /* Bordes un poco redondeados */
-        }
-
+        .logo { width: 150px; height: auto; margin-bottom: 10px; border-radius: 15px; }
         h1 { font-size: 1.4rem; margin-bottom: 10px; color: #288ea7; }
         p.descripcion { font-size: 0.85rem; color: #666; margin-bottom: 25px; line-height: 1.4; }
 
@@ -60,7 +53,6 @@
 <body>
 
 <div class="card">
-    <!-- IMAGEN CON TAMAÑO CORREGIDO -->
     <img src="Picsart_26-02-18_22-43-20-017.png" alt="Logo" class="logo" onerror="this.style.display='none'">
 
     <h1>🦋 COTIZADOR DE USD 🦋</h1> 
@@ -81,32 +73,30 @@
 
 <script>
 function calcular() {
-    // Configuración fácil de editar
     const COTIZACION_PESOS = 1465; 
     const CARGO_FIJO_USD = 2.06;
 
     const input = document.getElementById('montoUser');
     const visor = document.getElementById('total');
-    
-    // Convertimos el valor asegurando que sea un número válido
     const montoIngresado = parseFloat(input.value);
 
     if (!isNaN(montoIngresado) && montoIngresado > 0) {
         const dolaresTotales = montoIngresado + CARGO_FIJO_USD;
         const resultadoFinal = dolaresTotales * COTIZACION_PESOS;
 
-        // Formateo con moneda argentina
         visor.innerText = resultadoFinal.toLocaleString('es-AR', {
             style: 'currency',
             currency: 'ARS',
             minimumFractionDigits: 2
         });
         
-        // Efecto de "salto" visual al cambiar
         visor.style.transform = "scale(1.05)";
         setTimeout(() => visor.style.transform = "scale(1)", 100);
     } else {
         visor.innerText = "$ 0,00";
     }
 }
- 
+</script>
+
+</body>
+</html>
