@@ -77,7 +77,9 @@
 
 <script>
 function calcular() {
-    const COTIZACION_FIJA = 1480; // La cotización que elegiste
+    const COTIZ_HASTA_10 = 1485;
+    const COTIZ_MAS_DE_10 = 1462;
+    const COTIZ_MAS_DE_19 = 1450;
     const CARGO_FIJO_USD = 2.06;
 
     const input = document.getElementById('montoUser');
@@ -85,8 +87,11 @@ function calcular() {
     let monto = parseFloat(input.value);
 
     if (!isNaN(monto) && monto > 0) {
-        // Cálculo directo con tu nueva cotización
-        const resultadoFinal = (monto + CARGO_FIJO_USD) * COTIZACION_FIJA;
+        let cotizacion = COTIZ_HASTA_10;
+        if (monto > 19) cotizacion = COTIZ_MAS_DE_19;
+        else if (monto > 10) cotizacion = COTIZ_MAS_DE_10;
+
+        const resultadoFinal = (monto + CARGO_FIJO_USD) * cotizacion;
 
         visor.innerText = resultadoFinal.toLocaleString('es-AR', {
             style: 'currency',
